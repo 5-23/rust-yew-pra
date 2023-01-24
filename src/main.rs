@@ -1,55 +1,51 @@
-*{
-    margin: 0;
-    font-family: "ONE Mobile POP OTF"
-}
-body{
-    background-color: aliceblue;
-}
-@font-face {
-    font-family: 'ONE Mobile POP OTF';
-    src: url('https://cdn.jsdelivr.net/gh/wooin21/web/fonts/onestore/ONE Mobile POP OTF.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
+use yew::prelude::*;
+
+#[derive(PartialEq, Properties)]
+struct Comp{
+    name: String,
+    plus: isize,
+    minus: isize,
 }
 
-.Com > #count{
-    padding-top: 50px;
-    margin-bottom: 10px;
-    color: rgb(0, 136, 255);
-    font-size: 50px;
-    text-align: center;
-    transform-style: flat;
+
+#[function_component]
+fn Com(arg: &Comp) -> Html{
+    let c = use_state(|| 0);
+    let cls = use_state(||"");
+    let onclick = {
+        let cls = cls.clone();
+        let c = c.clone();
+        let plus = arg.plus.clone();
+        let minus = arg.minus.clone();
+        
+        move |_| {
+            if *cls == "boom1"{
+                cls.set("boom2");
+            }else{
+                cls.set("boom1");
+            }
+            c.set(*c + plus - minus);
+        }
+    };
+    html!{
+        <div class="Com">
+            <p id="count" class={ *cls }>{ *c }</p>
+            <button {onclick} id="btn">{ arg.name.clone() }</button>
+        </div>
+    }
 }
 
-.Com > #btn{
-    display: block;
-    margin: 0 auto;
-    border: solid 0px;
-    color: #fff;
-    background-color: rgb(0, 136, 255);
-    border-radius: 20px;
-    font-size: 50px;
-    padding: 10px 200px;
-    cursor: pointer;
+#[function_component]
+fn App() -> Html {
+    println!("hello!");
+    html! {
+        <div>
+            <Com name="+1" plus=1 minus=0></Com>
+            <Com name="-1" plus=0  minus=1></Com>
+        </div>
+    }
 }
 
-.Com > #btn:hover{
-    background-color: rgb(0, 123, 231);
-}
-
-.boom1{
-    animation-duration: .1s;
-    animation-name: clicked1;
-}
-.boom2{
-    animation-duration: .1s;
-    animation-name: clicked2;
-}
-
-@keyframes clicked1{0%{transform:rotate(0deg); font-size: 70; }to{transform:rotate(1turn)}}
-@keyframes clicked2{0%{transform:rotate(0deg); font-size: 70; }to{transform:rotate(1turn)}}
-
-
-::-webkit-scrollbar{
-    display:none
+fn main() {
+    yew::Renderer::<App>::new().render();
 }
