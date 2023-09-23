@@ -1,22 +1,53 @@
 use yew::prelude::*;
-
+#[derive(PartialEq, Clone, Properties)]
 struct Video {
     id: usize,
     title: String,
 }
 
+#[derive(PartialEq, Properties)]
+pub struct VideoListProps {
+    video: Video,
+}
+
+#[function_component(VideoHtml)]
+pub fn video(VideoListProps { video }: &VideoListProps) -> Html {
+    let text = use_state(||"click here!".to_string());
+
+
+    let v = video.title.clone();
+
+    let onclick = {
+        let text = text.clone();
+        
+        move |_| {
+            text.set(format!("{v}"));
+        }
+    };
+
+
+    html! {
+        <>
+            <div {onclick}> <h1>{(*text).clone()}</h1>   <h2>{video.id.to_string()}</h2>  </div>
+        </>
+    }
+}
+
 #[function_component]
-fn app() -> Html {
-    let videos = vec![Video{ id: 1, title: "sus".to_string() }, Video{ id: 2, title: "sussy baka".to_string() }];
+fn App() -> Html {
+    let video = 
+        Video {
+            id: 1,
+            title: "hmm".to_string(),
+        };
     // let videos = ;
     html! {
         <>
-            <h1>{"Hello, world!"}</h1>
-            {videos.iter().map(|v| {html!{ <h2 id={v.id.to_string()}>{&v.title}</h2> }}).collect::<Html>()}
+            <VideoHtml video={video}/>
         </>
     }
 }
 
 fn main() {
-    yew::Renderer::<app>::new().render();
+    yew::Renderer::<App>::new().render();
 }
