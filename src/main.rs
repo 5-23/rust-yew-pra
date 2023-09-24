@@ -1,4 +1,8 @@
+use stylist::css;
 use yew::prelude::*;
+use stylist::Style;
+
+
 #[derive(PartialEq, Clone, Properties)]
 struct Video {
     id: usize,
@@ -14,7 +18,6 @@ pub struct VideoListProps {
 pub fn video(VideoListProps { video }: &VideoListProps) -> Html {
     let text = use_state(||"click here!".to_string());
 
-
     let v = video.title.clone();
 
     let onclick = {
@@ -28,7 +31,8 @@ pub fn video(VideoListProps { video }: &VideoListProps) -> Html {
 
     html! {
         <>
-            <div {onclick}> <h1>{(*text).clone()}</h1>   <h2>{video.id.to_string()}</h2>  </div>
+            <div {onclick}>
+            <h1 class={if *text == "click here!".to_string(){ css!(r#"background-color: #ddd;"#) }else{css!()}}>{(*text).clone()}</h1>   <h2>{video.id.to_string()}</h2>  </div>
         </>
     }
 }
